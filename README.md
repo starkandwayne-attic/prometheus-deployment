@@ -56,7 +56,7 @@ genesis new site --template vsphere <name>
 Notes
 ======================================
 
-For more information, check out the [Genesis][genesis] repo, or `genesis help. You can download the Genesis program from [Github][genesis]
+For more information, check out the [Genesis][genesis] repo, or `genesis help`. You can download the Genesis program from [Github][genesis]
 
 [genesis]: https://github.com/starkandwayne/genesis
 [prometheus]: https://prometheus.io/

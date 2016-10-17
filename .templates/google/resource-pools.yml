@@ -1,0 +1,33 @@
+---
+meta:
+  google:
+    zones:
+      z1: (( param "Please specify the Google Zone where VMs will be in?" ))
+
+resource_pools:
+  - name: prometheus
+    network: prometheus
+    stemcell: (( grab meta.stemcell ))
+    cloud_properties:
+       machine_type: n1-standard-2
+       zone: (( grab meta.google.zones.z1 ))
+
+compilation:
+  workers: 3
+  network: prometheus
+  cloud_properties:
+    machine_type: n1-standard-4
+    zone: (( grab meta.google.zones.z1 ))
+
+jobs:
+  - name: alertmanager
+    resource_pool: prometheus
+
+  - name: prometheus
+    resource_pool: prometheus
+
+  - name: db
+    resource_pool: prometheus
+
+  - name: grafana
+    resource_pool: prometheus

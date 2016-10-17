@@ -1,0 +1,18 @@
+---
+disk_pools:
+  - name: small
+    disk_size: 1024
+    cloud_properties: {}
+
+jobs:
+  - name: alertmanager
+    persistent_disk_pool: small
+
+  - name: prometheus
+    persistent_disk_pool: small
+
+  - name: db
+    persistent_disk_pool: small
+
+  - name: grafana
+    persistent_disk_pool: small

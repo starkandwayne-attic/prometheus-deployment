@@ -1,0 +1,27 @@
+---
+networks:
+  - name: prometheus
+    type: manual
+    subnets:
+      - range: 10.244.48.0/24
+        gateway: 10.244.48.1
+        static:
+          - 10.244.48.2 - 10.244.48.60
+
+jobs:
+  - name: alertmanager
+    networks:
+      - name: prometheus
+
+  - name: prometheus
+    networks:
+      - name: prometheus
+
+  - name: db
+    networks:
+      - name: prometheus
+        static_ips: (( static_ips 0 ))
+
+  - name: grafana
+    networks:
+      - name: prometheus

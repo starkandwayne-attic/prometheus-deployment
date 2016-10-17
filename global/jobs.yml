@@ -1,0 +1,44 @@
+---
+jobs:
+  - name: alertmanager
+    instances: 1
+    networks:             (( param "Please specify the network configuration for the alertmanager job" ))
+    persistent_disk_pool: (( param "Please specify the persistent disk pool configuration for the alertmanager job" ))
+    resource_pool:        (( param "Please specify the resource pool configuration for the alertmananager job" ))
+    templates:
+      - { name: alertmanager,   release: prometheus }
+      - { name: toolbelt,       release: toolbelt }
+      - { name: toolbelt-quick, release: toolbelt }
+
+  - name: prometheus
+    instances: 1
+    networks:             (( param "Please specify the network configuration for the prometheus job" ))
+    persistent_disk_pool: (( param "Please specify the persistent disk pool configuration for the prometheus job" ))
+    resource_pool:        (( param "Please specify the resource pool configuration for the prometheus job" ))
+    templates:
+      - { name: prometheus,     release: prometheus }
+      - { name: node_exporter,  release: prometheus }
+      - { name: pushgateway,    release: prometheus }
+      - { name: toolbelt,       release: toolbelt }
+      - { name: toolbelt-quick, release: toolbelt }
+
+  - name: db
+    instances: 1
+    networks:             (( param "Please specify the network configuration for the db job" ))
+    persistent_disk_pool: (( param "Please specify the persistent disk pool configuration for the db job" ))
+    resource_pool:        (( param "Please specify the resource pool configuration for the db job" ))
+    templates:
+      - { name: postgres,       release: postgres }
+      - { name: shield-agent,   release: shield }
+      - { name: toolbelt,       release: toolbelt }
+      - { name: toolbelt-quick, release: toolbelt }
+
+  - name: grafana
+    instances: 1
+    networks:             (( param "Please specify the network configuration for the grafana job" ))
+    persistent_disk_pool: (( param "Please specify the persistent disk pool configuration for the grafana job" ))
+    resource_pool:        (( param "Please specify the resource pool configuration for the grafana job" ))
+    templates:
+      - { name: grafana,        release: prometheus }
+      - { name: toolbelt,       release: toolbelt }
+      - { name: toolbelt-quick, release: toolbelt }

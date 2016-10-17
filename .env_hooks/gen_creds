@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+echo "Generating credentials for Prometheus"
+safe gen ${VAULT_PREFIX}/grafana password -- \
+     gen ${VAULT_PREFIX}/grafana secret_key -- \
+     gen ${VAULT_PREFIX}/db password > /dev/null

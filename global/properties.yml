@@ -1,0 +1,72 @@
+---
+meta:
+  grafanadb:
+    scheme:   postgres
+    host:     (( grab jobs.db.networks[0].static_ips[0] ))
+    dbname:   grafanadb
+    username: grafanaadmin
+    password: (( vault meta.vault_prefix "/db:password" ))
+  shield:
+    daemon_public_key: (( param "Please specify the Shield daemon public key" ))
+
+properties:
+  alertmanager:
+    route:
+      receiver: default-receiver
+    receivers:
+      - name: default-receiver
+
+  prometheus:
+    scrape_configs:
+      - job_name: node
+        static_configs:
+          - targets:
+            - localhost:9100
+      - job_name: prometheus
+        static_configs:
+          - targets:
+            - localhost:9090
+      - job_name: pushgateway
+        static_configs:
+          - targets:
+            - localhost:9091
+
+  postgres:
+    config:
+      port: 5432
+      listen_addresses: '*'
+    hba:
+      - host all all 0.0.0.0/0 md5
+      - host all all ::/0 md5
+    replication:
+      enabled: false
+
+  pgpool:
+    databases:
+      - name: (( grab meta.grafanadb.dbname ))
+        users:
+          - (( grab meta.grafanadb.username ))
+        extensions:
+          - citext
+          - pgcrypto
+    users:
+      - username: (( grab meta.grafanadb.username ))
+        password: (( grab meta.grafanadb.password ))
+
+  grafana:
+    database:
+      type: (( grab meta.grafanadb.scheme ))
+      host: (( grab meta.grafanadb.host ))
+      name: (( grab meta.grafanadb.dbname ))
+      user: (( grab meta.grafanadb.username ))
+      password: (( grab meta.grafanadb.password ))
+    session:
+      provider: (( grab meta.grafanadb.scheme ))
+      provider_config: (( concat "user=" meta.grafanadb.username " password=" meta.grafanadb.password " host=" meta.grafanadb.host " dbname=" meta.grafanadb.dbname " port=5432 sslmode=disable" ))
+    security:
+      admin_user: admin
+      admin_password: (( vault meta.vault_prefix "/grafana:password" ))
+
+  shield:
+    agent:
+      daemon_public_key: (( grab meta.shield.daemon_public_key ))

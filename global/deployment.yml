@@ -1,0 +1,14 @@
+---
+name:           (( param "Please specify the deployment name for your deployment" ))
+
+director_uuid:  (( param "Please specify the UUID of your target BOSH director" ))
+
+compilation:    (( param "Please specify the compilation configuration for your deployment" ))
+
+disk_pools:     (( param "Please specify the disk pools configuration for your deployment" ))
+
+networks:       (( param "Please specify he networks configuration for your deployment" ))
+
+resource_pools: (( param "Please specify the resource pools configuration for your deployment" ))
+
+update:         (( param "Please specify the update configuration for your deployment" ))

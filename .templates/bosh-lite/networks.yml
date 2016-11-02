@@ -25,3 +25,7 @@ jobs:
   - name: grafana
     networks:
       - name: prometheus
+
+  - name: nginx
+    networks:
+      - name: prometheus

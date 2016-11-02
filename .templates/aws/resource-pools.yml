@@ -31,3 +31,6 @@ jobs:
 
   - name: grafana
     resource_pool: prometheus
+
+  - name: nginx
+    resource_pool: prometheus

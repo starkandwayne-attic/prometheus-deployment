@@ -1,0 +1,7 @@
+---
+update:
+  canaries: 1
+  max_in_flight: 32
+  canary_watch_time: 10000-60000
+  update_watch_time: 10000-60000
+  serial: false

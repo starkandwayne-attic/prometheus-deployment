@@ -1,0 +1,33 @@
+---
+resource_pools:
+  - name: prometheus
+    network: prometheus
+    stemcell: (( grab meta.stemcell ))
+    cloud_properties:
+      cpu:  2
+      ram:  2_048
+      disk: 4_096
+
+compilation:
+  workers: 3
+  network: prometheus
+  cloud_properties:
+    cpu:  2
+    ram:  4_096
+    disk: 4_096
+
+jobs:
+  - name: alertmanager
+    resource_pool: prometheus
+
+  - name: prometheus
+    resource_pool: prometheus
+
+  - name: db
+    resource_pool: prometheus
+
+  - name: grafana
+    resource_pool: prometheus
+
+  - name: nginx
+    resource_pool: prometheus

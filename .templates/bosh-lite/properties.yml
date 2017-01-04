@@ -2,3 +2,11 @@
 meta:
   shield:
     daemon_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwep89cUhcbiqbPuf5iCKxWwZDvrTBzSOr1JC3/mQh3E82MJ2YVXHMdHoRxfdUjBqspKu7v4ooiEifr1RiNk0XDLlBNEYLx2xjJinNA33nJIRZMKfdB2VB8T0o0bkqCIasciKDLuJLV4fuJK6m1Srj+sa1z/ZUIHKjK4Vn8lT0bzADqCgCvzJxmP+1YyUql/QpzUxLNMVhOzVUtZJGggvizYheeRxceBwqYbHqJ3yp8oXJYb4PipD0/3gcCkB6O1Gsk4+y24Sl4OiPkn65LCpai0qQPZ42rw2xOC1Ac2bKWUSOoG5JGlJCFzBL4HQ/Rbxlg7xjV1u6ot+CmPiTEhpz
+  grafana:
+    grafanadb:
+      scheme: postgres
+      host: (( grab jobs.db.networks[0].static_ips[0] ))
+      port: 5432
+      dbname: grafanadb
+      username: grafanaadmin
+      session_config: (( concat "user=" meta.grafana.grafanadb.username " password=" meta.grafana.grafanadb.password " host=" meta.grafana.grafanadb.host " dbname=" meta.grafana.grafanadb.dbname " port=" meta.grafana.grafanadb.port " sslmode=disable" ))

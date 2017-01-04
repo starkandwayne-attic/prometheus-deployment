@@ -3,8 +3,8 @@
 set -e
 
 echo "Generating credentials for Prometheus"
-safe gen ${VAULT_PREFIX}/alertmanager password -- \
-     gen ${VAULT_PREFIX}/db password -- \
-     gen ${VAULT_PREFIX}/grafana password -- \
-     gen ${VAULT_PREFIX}/grafana secret_key -- \
-     gen ${VAULT_PREFIX}/prometheus password > /dev/null
+safe gen ${VAULT_PREFIX}/creds/alertmanager password -- \
+     gen ${VAULT_PREFIX}/creds/db password -- \
+     gen ${VAULT_PREFIX}/creds/grafana password -- \
+     gen ${VAULT_PREFIX}/creds/grafana secret_key -- \
+     gen ${VAULT_PREFIX}/creds/prometheus password > /dev/null

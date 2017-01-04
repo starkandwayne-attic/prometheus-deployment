@@ -7,7 +7,6 @@ jobs:
     resource_pool:        (( param "Please specify the resource pool configuration for the alertmananager job" ))
     templates:
       - { name: alertmanager,   release: prometheus }
-      - { name: node_exporter,  release: prometheus }
       - { name: toolbelt,       release: toolbelt }
       - { name: toolbelt-quick, release: toolbelt }
 
@@ -30,7 +29,6 @@ jobs:
     resource_pool:        (( param "Please specify the resource pool configuration for the db job" ))
     templates:
       - { name: postgres,       release: postgres }
-      - { name: node_exporter,  release: prometheus }
       - { name: shield-agent,   release: shield }
       - { name: toolbelt,       release: toolbelt }
       - { name: toolbelt-quick, release: toolbelt }
@@ -42,11 +40,6 @@ jobs:
     resource_pool:        (( param "Please specify the resource pool configuration for the grafana job" ))
     templates:
       - { name: grafana,                 release: prometheus }
-      - { name: node_exporter,           release: prometheus }
-      - { name: bosh_dashboards,         release: prometheus }
-      - { name: cloudfoundry_dashboards, release: prometheus }
-      - { name: mysql_dashboards,        release: prometheus }
-      - { name: system_dashboards,       release: prometheus }
       - { name: toolbelt,                release: toolbelt }
       - { name: toolbelt-quick,          release: toolbelt }
 
@@ -56,6 +49,5 @@ jobs:
     resource_pool:        (( param "Please specify the resource pool configuration for the nginx job" ))
     templates:
       - { name: nginx,        release: prometheus }
-      - { name: node_exporter,  release: prometheus }
       - { name: toolbelt,       release: toolbelt }
       - { name: toolbelt-quick, release: toolbelt }

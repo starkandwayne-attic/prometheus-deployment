@@ -1,11 +1,14 @@
 ---
 meta:
-  grafanadb:
-    scheme:   postgres
-    host:     (( grab jobs.db.networks[0].static_ips[0] ))
-    dbname:   grafanadb
-    username: grafanaadmin
-    password: (( vault meta.vault_prefix "/db:password" ))
+  grafana:
+    grafanadb:
+      scheme:   (( param "Please specify scheme for grafanadb" ))
+      host:     (( param "Please specify host for grafanadb" ))
+      port:     (( param "Please specify port for grafanadb" ))
+      dbname:   (( param "Please specify dbname for grafanadb" ))
+      username: (( param "Please specify username for grafanadb" ))
+      password: (( vault meta.vault_prefix "/creds/db:password" ))
+      session_config: (( param "please specify session_config for db" ))
   shield:
     daemon_public_key: (( param "Please specify the Shield daemon public key" ))
 
@@ -18,6 +21,10 @@ properties:
 
   prometheus:
     scrape_configs:
+      - job_name: node
+        static_configs:
+          - targets:
+            - localhost:9100
       - job_name: prometheus
         static_configs:
           - targets:
@@ -29,7 +36,7 @@ properties:
 
   postgres:
     config:
-      port: 5432
+      port: (( grab meta.grafana.grafanadb.port ))
       listen_addresses: '*'
     hba:
       - host all all 0.0.0.0/0 md5
@@ -39,40 +46,38 @@ properties:
 
   pgpool:
     databases:
-      - name: (( grab meta.grafanadb.dbname ))
+      - name: (( grab meta.grafana.grafanadb.dbname ))
         users:
-          - (( grab meta.grafanadb.username ))
+          - (( grab meta.grafana.grafanadb.username ))
         extensions:
           - citext
           - pgcrypto
     users:
-      - username: (( grab meta.grafanadb.username ))
-        password: (( grab meta.grafanadb.password ))
+      - username: (( grab meta.grafana.grafanadb.username ))
+        password: (( grab meta.grafana.grafanadb.password ))
 
   grafana:
     database:
-      type: (( grab meta.grafanadb.scheme ))
-      host: (( grab meta.grafanadb.host ))
-      name: (( grab meta.grafanadb.dbname ))
-      user: (( grab meta.grafanadb.username ))
-      password: (( grab meta.grafanadb.password ))
-    dashboards:
-      json:
-        enabled: true
+      type: (( grab meta.grafana.grafanadb.scheme ))
+      host: (( concat meta.grafana.grafanadb.host ":" meta.grafana.grafanadb.port ))
+      name: (( grab meta.grafana.grafanadb.dbname ))
+      user: (( grab meta.grafana.grafanadb.username ))
+      password: (( grab meta.grafana.grafanadb.password ))
     session:
-      provider: (( grab meta.grafanadb.scheme ))
-      provider_config: (( concat "user=" meta.grafanadb.username " password=" meta.grafanadb.password " host=" meta.grafanadb.host " dbname=" meta.grafanadb.dbname " port=5432 sslmode=disable" ))
+      provider: (( grab meta.grafana.grafanadb.scheme ))
+      provider_config: (( grab meta.grafana.grafanadb.session_config ))
     security:
       admin_user: admin
-      admin_password: (( vault meta.vault_prefix "/grafana:password" ))
+      admin_password: (( vault meta.vault_prefix "/creds/grafana:password" ))
+      secret_key: (( vault meta.vault_prefix "/creds/grafana:secret_key" ))
 
   nginx:
     alertmanager:
       auth_username: admin
-      auth_password: (( vault meta.vault_prefix "/alertmanager:password" ))
+      auth_password: (( vault meta.vault_prefix "/creds/alertmanager:password" ))
     prometheus:
       auth_username: admin
-      auth_password: (( vault meta.vault_prefix "/prometheus:password" ))
+      auth_password: (( vault meta.vault_prefix "/creds/prometheus:password" ))
 
   shield:
     agent:

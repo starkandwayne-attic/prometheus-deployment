@@ -34,7 +34,6 @@ The `aws` template will set you up with a structure suitable for deploying Prome
 genesis new site --template aws <name>
 ```
 
-
 Google Cloud Platform (Google) Sites
 ======================================
 
@@ -42,6 +41,15 @@ The `google` template will set you up with a structure suitable for deploying Pr
 
 ```
 genesis new site --template google <name>
+```
+
+vCloud Director (vCloud) Sites
+======================================
+
+The `vcloud` template will set you up with a structure suitable for deploying Prometheus on a vCloud Director infrastructure.
+
+```
+genesis new site --template vcloud <name>
 ```
 
 vSphere Sites

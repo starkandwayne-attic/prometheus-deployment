@@ -1,4 +1,9 @@
 ---
+meta:
+  openstack:
+    azs:
+      z1: (( param "Please specify the AWS Availability Zone where VMs will be in?" ))
+
 resource_pools:
   - name: prometheus
     network: prometheus

@@ -2,8 +2,15 @@
 networks:
   - name: prometheus
     type: manual
-    subnets: (( param "Please specify the network configuration for prometheus" ))
-
+    subnets: 
+    - range: (( param "Enter the CIDR address for this subnet" ))
+      gateway: (( param "Enter the Gateway for this subnet" ))
+      dns: (( param "Enter the dns for this subnet" ))
+      static: (( param "Enter the static IP ranges for this subnet" ))
+      reserved: (( param "Enter the reserved IP ranges for this subnet" ))
+      cloud_properties:
+        net_id: (( param "Enter the network ID Openstack for prometheus network" ))
+        security_groups: (( param "Enter the security groups for this subnet" ))
 
 jobs:
   - name: alertmanager
@@ -26,5 +33,3 @@ jobs:
   - name: nginx
     networks:
       - name: prometheus
-        default: [dns, gateway]
-        static_ips: (( static_ips 0 ))

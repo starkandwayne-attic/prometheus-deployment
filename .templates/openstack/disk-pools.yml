@@ -1,7 +1,5 @@
 ---
 disk_pools:
-  - name: tiny
-    disk_size: 4_096
   - name: small
     disk_size: 10_240
   - name: medium
@@ -14,10 +12,10 @@ jobs:
     persistent_disk_pool: small
 
   - name: prometheus
-    persistent_disk_pool: medium
+    persistent_disk_pool: large 
 
   - name: db
-    persistent_disk_pool: small
+    persistent_disk_pool: medium 
 
   - name: grafana
     persistent_disk_pool: small

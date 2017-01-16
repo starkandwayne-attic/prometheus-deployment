@@ -1,0 +1,72 @@
+---
+meta:
+  shield:
+    daemon_public_key: (( vault "secret/dc01/proto/shield/keys/core:public" ))
+
+properties:
+  prometheus:
+    rule_files: 
+    - /var/vcap/packages/bosh_alerts/*.alerts
+    - /var/vcap/packages/cloudfoundry_alerts/*.alerts
+    scrape_configs:
+    - (( append ))
+    - job_name: bosh_graphite
+      static_configs:
+      - targets: (( grab meta.graphite_exporter_targets ))
+    - job_name: firehose
+      static_configs:
+      - targets: (( grab meta.firehose_exporter_targets ))
+    - job_name: cf
+      scrape_timeout: 60s
+      static_configs:
+      - targets: (( grab meta.cf_exporter_targets ))
+    web:
+      external_url: (( concat "http://" jobs.nginx.networks.vip.static_ips.0 ":9093" ))
+
+  alertmanager:
+    # Slack Alerts can be configured here, put the slack webhook in vault
+    #receivers:
+    #- name: default-receiver
+    #  slack_configs:
+    #  - api_url: (( vault "secret/aws-clients/shared/slack:webhook" ))
+    #    channel: (( concat "#" meta.env "-alerts" ))
+    web:
+      external_url: (( concat "http://" jobs.nginx.networks.vip.static_ips.0 ":9093" ))
+
+  grafana: 
+    server:
+      root_url: (( concat "http://" jobs.nginx.networks.vip.static_ips.0 ":9093" ))
+    dashboards: 
+      json:
+        enabled: true
+    prometheus: 
+      dashboard_files: 
+        - /var/vcap/packages/bosh_dashboards/bosh_jobs.json
+        - /var/vcap/packages/bosh_dashboards/bosh_overview.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_apps_latency.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_apps_requests.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_apps_response_size.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_apps_system.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_bbs.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_cc.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_cells_capacity.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_component_metrics.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_diego_auctions.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_diego_health.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_doppler_server.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_etcd.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_etcd_operations.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_garden_linux.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_lrps_tasks.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_metron_agent.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_metron_agent_doppler.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_route_emitter.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_router.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_summary.json
+        - /var/vcap/packages/cloudfoundry_dashboards/cf_uaa.json
+        - /var/vcap/packages/cloudfoundry_dashboards/prometheus_cf_exporter.json
+        - /var/vcap/packages/cloudfoundry_dashboards/prometheus_firehose_exporter.json
+        - /var/vcap/packages/system_dashboards/system_disk_performance.json
+        - /var/vcap/packages/system_dashboards/system_disk_space.json
+        - /var/vcap/packages/system_dashboards/system_overview.json
+

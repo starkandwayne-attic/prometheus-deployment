@@ -1,0 +1,30 @@
+---
+networks:
+  - name: prometheus
+    type: manual
+    subnets: (( param "Please specify the network configuration for prometheus" ))
+
+
+jobs:
+  - name: alertmanager
+    networks:
+      - name: prometheus
+
+  - name: prometheus
+    networks:
+      - name: prometheus
+
+  - name: db
+    networks:
+      - name: prometheus
+        static_ips: (( static_ips 0 ))
+
+  - name: grafana
+    networks:
+      - name: prometheus
+
+  - name: nginx
+    networks:
+      - name: prometheus
+        default: [dns, gateway]
+        static_ips: (( static_ips 0 ))

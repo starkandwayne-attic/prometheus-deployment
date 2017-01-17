@@ -1,0 +1,36 @@
+---
+meta:
+  openstack:
+    azs:
+      z1: (( param "Please specify the AWS Availability Zone where VMs will be in?" ))
+
+resource_pools:
+  - name: prometheus
+    network: prometheus
+    stemcell: (( grab meta.stemcell ))
+    cloud_properties:
+       instance_type: m1.medium
+       availability_zone: (( grab meta.openstack.azs.z1 ))
+
+compilation:
+  workers: 3
+  network: prometheus
+  cloud_properties:
+    instance_type: m1.large
+    availability_zone: (( grab meta.openstack.azs.z1 ))
+
+jobs:
+  - name: alertmanager
+    resource_pool: prometheus
+
+  - name: prometheus
+    resource_pool: prometheus
+
+  - name: db
+    resource_pool: prometheus
+
+  - name: grafana
+    resource_pool: prometheus
+
+  - name: nginx
+    resource_pool: prometheus

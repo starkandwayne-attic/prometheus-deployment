@@ -1,0 +1,10 @@
+---
+meta:
+  grafana:
+    grafanadb:
+      scheme: postgres
+      host: (( grab jobs.db.networks[0].static_ips[0] ))
+      port: 5432
+      dbname: grafanadb
+      username: grafanaadmin
+      session_config: (( concat "user=" meta.grafana.grafanadb.username " password=" meta.grafana.grafanadb.password " host=" meta.grafana.grafanadb.host " dbname=" meta.grafana.grafanadb.dbname " port=" meta.grafana.grafanadb.port " sslmode=disable" ))
